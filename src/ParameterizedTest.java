@@ -6,6 +6,10 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Run the ParameterizedTest many times with different sets of parameters.
+ * Uses the Parameterized runner
+ */
 @RunWith(value= Parameterized.class)
 public class ParameterizedTest {
     private double expected;
