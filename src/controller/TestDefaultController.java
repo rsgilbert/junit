@@ -5,6 +5,7 @@ import controller.Request;
 import controller.RequestHandler;
 import controller.Response;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -120,5 +121,21 @@ public class TestDefaultController {
         SampleHandler handler2 = new SampleHandler();
         // The following line is supposed to throw a runtime exception
         controller.addHandler(request, handler2);
+    }
+
+    @Test(timeout=13)
+    @Ignore(value="Ignore for now until we decide a decent time limit")
+    public void testProcessMultipleRequestsTimeout() {
+        Request request;
+        Response response;
+        RequestHandler handler = new SampleHandler();
+
+        for(int i = 0; i < 99999; i++){
+            request = new SampleRequest(String.valueOf(i));
+            controller.addHandler(request, handler);
+            response = controller.processRequest(request);
+            assertNotNull("Response can not be null", response);
+            assertNotSame("Response can not be an error response", ErrorResponse.class, response.getClass());
+        }
     }
 }
