@@ -107,4 +107,18 @@ public class TestDefaultController {
         assertNotNull("Must not return null response", response);
         assertEquals(new SampleResponse(), response);
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetHandlerNotDefined() {
+        SampleRequest request = new SampleRequest("testNotDefined");
+        // The following line is supposed to throw a RuntimeException
+        controller.getHandler(request);
+    }
+
+    @Test(expected = Exception.class)
+    public void testAddRequestDuplicateName() {
+        SampleHandler handler2 = new SampleHandler();
+        // The following line is supposed to throw a runtime exception
+        controller.addHandler(request, handler2);
+    }
 }
