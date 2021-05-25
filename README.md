@@ -25,3 +25,8 @@ Running instrumented classes
 
 Generating cobertura reports 
 > cobertura-report --format html --datafile cobertura.ser --destination reports src
+
+
+# Advice
+That illustrates a key concept: Require objects, don’t search for objects, and ask only for objects
+that your application requires. Page 74
