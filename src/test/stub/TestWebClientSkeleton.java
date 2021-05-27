@@ -21,8 +21,15 @@ public class TestWebClientSkeleton {
     public static void setUp() throws Exception {
         Server server = new Server(8000);
         TestWebClientSkeleton t = new TestWebClientSkeleton();
+
+        // Set handler for content ok
         Context contentOkContext = new Context(server, "/testGetContentOk");
         contentOkContext.setHandler(t.new TestGetContentOkHandler()); // read about this
+
+        // Set handler for content not found
+        Context contentNotFoundContext = new Context(server, "/testGetContentNotFound");
+        contentNotFoundContext.setHandler(t.new TestGetContentNotFoundHandler());
+
         server.setStopAtShutdown(true);
         server.start();
     }
@@ -33,6 +40,28 @@ public class TestWebClientSkeleton {
         // jetty has been programmed to stop at shutdown
     }
 
+
+    @Test
+    public void testGetContentOk() throws Exception {
+        WebClient client = new WebClient();
+        String result = client.getContent(new URL(
+                "http://localhost:8000/testGetContentOk"
+        ));
+        assertEquals("Response by HTTP server does not match expected response",
+                "It works", result);
+    }
+
+    @Test
+    public void testGetContentNotFound() throws Exception {
+        WebClient client = new WebClient();
+        String result = client.getContent(new URL(
+                "http://localhost:8000/testGetContentNotFound"
+        ));
+        assertNull(result);
+    }
+    /**
+     * Handler for content ok
+     */
     private class TestGetContentOkHandler extends AbstractHandler {
         @Override
         public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) throws IOException {
@@ -48,13 +77,15 @@ public class TestWebClientSkeleton {
         }
     }
 
-    @Test
-    public void testGetContentOk() throws Exception {
-        WebClient client = new WebClient();
-        String result = client.getContent(new URL(
-                "http://localhost:8000/testGetContentOk"
-        ));
-        assertEquals("Response by HTTP server does not match expected response",
-                "It works", result);
+    /**
+     * Handler for content not found
+     */
+    private class TestGetContentNotFoundHandler extends AbstractHandler {
+        @Override
+        public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) throws IOException {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
+
+
 }
