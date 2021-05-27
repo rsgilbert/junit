@@ -16,6 +16,7 @@ public class StubHttpURLConnection extends HttpURLConnection {
                     "Can not read from URL Connection if doInput = false (call setDoInput(true)"
             );
         }
+        // Respond with test content
         return new ByteArrayInputStream(
                 "It works".getBytes()
         );
