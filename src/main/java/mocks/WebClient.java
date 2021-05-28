@@ -16,21 +16,33 @@ public class WebClient {
     // We've made the retrieval of the data content independent of the way we get the connection
     public String getContent(ConnectionFactory connectionFactory) {
         StringBuffer content = new StringBuffer();
+        InputStream is;
+        String result;
 
         try {
-            InputStream is = connectionFactory.getData();
+            is = connectionFactory.getData();
             int count;
             // Read all contents
             // While body implemented differently from the WebClient in stub package
             while(-1 != (count = is.read())) {
                 content.append(new String(Character.toChars(count)));
             }
+            result = content.toString();
         } catch (Exception e) {
             e.printStackTrace();
             // For testing purposes, returning null rather than throwing an exception is fine
             return null;
         }
-        return content.toString();
+
+        // Close the stream
+        if(is != null)
+            try {
+                is.close();
+            } catch (IOException e) {
+                result = null;
+            }
+
+        return result;
 
 
     }

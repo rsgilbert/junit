@@ -11,12 +11,17 @@ public class TestWebClient {
 
     @Test
     public void testContentOkUsingConnectionFactory() throws Exception {
+        String streamContent = "I_LOVED_HER";
         MockConnectionFactory mockConnectionFactory = new MockConnectionFactory();
-        mockConnectionFactory.setData(new ByteArrayInputStream("Hello".getBytes()));
+        MockInputStream mockInputStream = new MockInputStream();
+        mockInputStream.setBuffer(streamContent);
+        mockConnectionFactory.setData(mockInputStream);
 
         WebClient client = new WebClient();
         String result = client.getContent(mockConnectionFactory);
-        assertEquals("Content from connection must match", "Hello", result);
+
+        assertEquals("Content from connection must match", streamContent, result);
+        mockInputStream.verify();
     }
 
     @Test
